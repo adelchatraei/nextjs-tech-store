@@ -19,7 +19,7 @@ const EmptyCart = () => {
 
                 <p className="mb-12 font-medium text-gray-500">
                     Browse our collection and add the devices you need for your
-                    next workflow.``
+                    next workflow
                 </p>
 
                 <Link

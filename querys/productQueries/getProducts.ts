@@ -5,7 +5,6 @@ import {
     ProductsResponseSchema,
 } from "@/schemas/products/productResponse";
 import buildProductQuery from "@/utils/buildProductQuery";
-import { mockProducts } from "@/mocks/mockProducts";
 
 const getProducts = async (
     filter: ProductFilterType,
@@ -38,14 +37,25 @@ const getProducts = async (
     const result = ProductsResponseSchema.safeParse(data);
 
     if (!result.success) {
+        console.log("RAW DATA:", JSON.stringify(data, null, 2));
+        console.log(
+            "ZOD ERRORS:",
+            JSON.stringify(result.error.issues, null, 2),
+        );
         throw new ApiError({
             message: "Response validation failed",
             status: 500,
         });
     }
 
-    // return result.data;
-    return mockProducts;
+    if (!result.success) {
+        throw new ApiError({
+            message: "Response validation failed",
+            status: 500,
+        });
+    }
+
+    return result.data;
 };
 
 export default getProducts;

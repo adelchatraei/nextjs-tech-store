@@ -18,3 +18,4 @@ if (models.Category && !models.Category.schema.path("slug")) {
 const Category = models.Category || model("Category", CategorySchema);
 
 export default Category;
+

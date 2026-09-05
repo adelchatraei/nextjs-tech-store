@@ -3,9 +3,12 @@ import FeatProductItem from "./FeatProductItem";
 import TrendingIcon from "@/components/icons/FeatProduct/TrendingIcon";
 import ProductSort from "./SortProduct";
 import { Suspense } from "react";
-import ProductSkeleton from "../LoadingProduct/LoadingProduct";
+import HomePageProductSkeleton from "../Loading/LoadingHomePageProduct";
+import { StoreFrantProps } from "./StoreFrant";
+import getProducts from "@/querys/productQueries/getProducts";
 
-const FeaturedProducts = ({ sort }: { sort: string }) => {
+const FeaturedProducts = async ({ filter, searchParam }: StoreFrantProps) => {
+    const product = await getProducts(filter);
     return (
         <>
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6 md:gap-0">
@@ -21,26 +24,17 @@ const FeaturedProducts = ({ sort }: { sort: string }) => {
                 <div className="flex items-center gap-6 text-gray-500 text-sm font-bold md:border-l border-gray-100 md:pl-8">
                     <div className="flex items-center gap-2">
                         <ZapIcon />
-                        <span>0 items</span>
+                        <span>{product.totalProducts}</span>
                     </div>
                     <div className="flex items-center gap-2 group relative">
                         <TrendingIcon />
-                        <ProductSort />
+                        <ProductSort searchParam={searchParam} />
                     </div>
                 </div>
             </div>
             <div>
-                <Suspense
-                    key={sort}
-                    fallback={
-                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-6">
-                            {[...Array(10)].map((_, i) => (
-                                <ProductSkeleton key={i} />
-                            ))}
-                        </div>
-                    }
-                >
-                    <FeatProductItem sort={sort} />
+                <Suspense fallback={<HomePageProductSkeleton />}>
+                    <FeatProductItem products={product.products} />
                 </Suspense>
             </div>
         </>

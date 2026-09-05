@@ -21,6 +21,7 @@ const Selection = ({ searchParams }: SelectionProps) => {
                     sort: e.target.value,
                 },
             })}`,
+            { scroll: false },
         );
     };
 

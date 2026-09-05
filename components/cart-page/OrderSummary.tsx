@@ -56,7 +56,7 @@ const OrderSummary = () => {
             </div>
             <Link
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-4 text-base font-semibold text-white transition hover:bg-primary-dark"
-                href={"/wishlist"}
+                href={"/checkout"}
             >
                 Checkout Now
                 <ArrowRight size={24} />

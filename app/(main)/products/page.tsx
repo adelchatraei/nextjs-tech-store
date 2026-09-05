@@ -1,13 +1,13 @@
-import Selection from "@/components/Main-cpm/Selection";
 import Sidebar from "@/components/product-page-cmp/sidebar/Sidebar";
 import Header from "@/components/product-page-cmp/Header";
-import ProductGrid from "@/components/product-page-cmp/ProductGrid";
-import { Search, SlidersHorizontal, SortDescIcon } from "lucide-react";
+import { Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import normalizeProductFilters from "../../../utils/normalizeProductFilters";
-import getProducts from "@/querys/productQueries/getProducts";
-import Pagination from "@/components/product-page-cmp/pagination/Pagination";
+
 import PriceFilter from "@/components/product-page-cmp/sidebar/price-filter/PriceFilter";
 import SearchFilter from "@/components/product-page-cmp/sidebar/Search-filter/SearchFilter";
+import ProductsSection from "@/components/product-page-cmp/ProductsSection";
+import { Suspense } from "react";
+import ProductSkeleton from "@/components/Loading/LoadingProduct";
 // import SearchFilter from "@/components/product-page-cmp/sidebar/Search-filter/SearchFilter";
 
 type ProductProps = {
@@ -17,14 +17,14 @@ type ProductProps = {
 const Products = async ({ searchParams }: ProductProps) => {
     const searchParam = await searchParams;
     const filter = normalizeProductFilters(searchParam);
-    const productResponse = await getProducts(filter);
+
     return (
         <div className="bg-[#F8FAFC] min-h-screen pt-12 pb-24">
             <div className="container-custom">
                 <Header searchParams={searchParam} />
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 md:gap-12">
-                    <aside>
+                    <aside className="flex flex-col gap-4">
                         <div className="bg-white rounded-4xl border border-gray-100/50 shadow-sm p-8 space-y-10">
                             <div>
                                 <h3 className="text-xs font-bold uppercase tracking-[2px] text-slate-400 mb-6 flex items-center gap-2">
@@ -47,35 +47,33 @@ const Products = async ({ searchParams }: ProductProps) => {
                                 <PriceFilter searchParams={searchParam} />
                             </div>
                         </div>
-                        <div className="bg-slate-900 rounded-4xl p-8 text-white relative overflow-hidden group shadow-xl"></div>
-                    </aside>
-                    <section className="lg:col-span-3">
-                        <article className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
-                            <p className="text-sm font-bold text-gray-500">
-                                Showing
-                                <span className="text-foreground">
-                                    {" "}
-                                    {productResponse.totalProducts}{" "}
-                                </span>
-                                revolutionary devices
+                        <div className="bg-slate-900 rounded-4xl p-8 text-white relative overflow-hidden group shadow-xl">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                            <Sparkles
+                                size={24}
+                                className="text-yellow-400 mb-4"
+                            />
+                            <h4 className="text-lg font-black tracking-tight mb-2 uppercase">
+                                Member Rewards
+                            </h4>
+                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest leading-relaxed mb-6">
+                                Join our loyalty program and save up to 15%.
                             </p>
-                            <div className="flex gap-2 items-center">
-                                <SortDescIcon size={18} />
-                                <Selection searchParams={searchParam} />
-                            </div>
-                        </article>
+                            <button className="w-full py-4 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-[2px] hover:bg-primary hover:text-white transition-all shadow-lg active:scale-95">
+                                Enroll Now
+                            </button>
+                        </div>
+                    </aside>
 
-                        <ProductGrid
-                            products={productResponse.products}
-                            view={filter.view}
+                    <Suspense
+                        key={JSON.stringify(filter)}
+                        fallback={<ProductSkeleton />}
+                    >
+                        <ProductsSection
+                            filter={filter}
+                            searchParam={searchParam}
                         />
-
-                        <Pagination
-                            currentPage={productResponse.currentPage}
-                            totalPages={productResponse.totalPages}
-                            searchParams={searchParam}
-                        />
-                    </section>
+                    </Suspense>
                 </div>
             </div>
         </div>

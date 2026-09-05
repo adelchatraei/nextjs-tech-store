@@ -15,7 +15,7 @@ const ProductGallery = ({ product }: SingleProductProps) => {
         <div className="lg:col-span-5 space-y-6">
             <div className="relative aspect-square w-full bg-white rounded-lg overflow-hidden group border border-gray-100 p-8">
                 <Image
-                    src={product.images?.[selectedImage] || "/placeholder.png"}
+                    src={product.images?.[selectedImage]}
                     alt={product.name}
                     priority
                     fill

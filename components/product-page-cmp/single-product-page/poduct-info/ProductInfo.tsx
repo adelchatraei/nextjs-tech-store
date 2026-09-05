@@ -4,10 +4,10 @@ import Link from "next/link";
 import { SingleProductProps } from "../ProductHero";
 import ProductActions from "./ProductActions";
 import useQuantity from "@/hooks/useQuantity";
+import { getKeyFeatures, parseSpecification } from "@/utils/parseSpecification";
 
 const ProductInfo = ({ product }: SingleProductProps) => {
     const qtyController = useQuantity(product.stock);
-
     const metaItems = [
         {
             label: "Price: $",
@@ -31,13 +31,8 @@ const ProductInfo = ({ product }: SingleProductProps) => {
         },
     ];
 
-    const features = [
-        "Certainly! Here is the clean, professional English breakdown for this high-end 4K Webcam:",
-        "Video & Optical Performance",
-        "Max Video Resolution: 4K Ultra HD (3840 × 2160 pixels) @ 30fps",
-        "High-Frame Rate Video: Full HD 1080p @ 60fps",
-        "Focus Technology: Advanced Autofocus (Keeps subject sharp in all conditions)",
-    ];
+    const parseSpecificationText = parseSpecification(product.specifications);
+    const keyFeature = getKeyFeatures(parseSpecificationText);
 
     return (
         <div className="lg:col-span-7 flex flex-col space-y-6">
@@ -62,18 +57,22 @@ const ProductInfo = ({ product }: SingleProductProps) => {
                     Key Features
                 </h3>
                 <ul className="space-y-3">
-                    {features.map((featur, index) => {
+                    {keyFeature.map((item, index) => {
                         return (
                             <li
                                 key={index}
                                 className="flex items-start gap-3 text-xs text-gray-600 font-medium"
                             >
-                                <span className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0" />
-                                <span>
-                                    <span className="font-bold text-slate-800 mr-1">
-                                        {featur}
+                                <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0" />
+                                <div className="flex gap-1">
+                                    <span>{item.sectionIcon}</span>
+                                    <span className=" font-bold text-slate-800 mr-1">
+                                        {item.sectionTitle}
                                     </span>
-                                </span>
+                                    {" :"}
+
+                                    {item.value}
+                                </div>
                             </li>
                         );
                     })}

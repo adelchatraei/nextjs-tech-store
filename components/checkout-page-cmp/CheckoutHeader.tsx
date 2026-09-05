@@ -6,7 +6,7 @@ const CheckoutHeader = () => {
         <div className="flex gap-6 items-center rounded-4xl bg-white p-3 sm:gap-6 shadow-[0_10px_40px_rgba(15,23,42,0.08)]">
             <Link
                 className="flex flex-col px-3 py-1 sm:px-4 sm:py-2 bg-neutral-gray rounded-xl  hover:bg-slate-100 hover:shadow-sm "
-                href={"/support"}
+                href={"/cart"}
             >
                 <ArrowLeft size={20} className="text-gray-400" />
                 <span className="text-gray-500 font-semibold text-[10px]">

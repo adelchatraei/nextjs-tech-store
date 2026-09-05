@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import useBasket from "@/store/useBasket";
 import { Product } from "@/schemas/products/product";
 import productToBasketItem from "@/lib/mappers/productToBasketItem";
+import toast from "react-hot-toast";
 
 type ProductActionsProps = {
     product: Product;
@@ -25,6 +26,7 @@ const ProductActions = ({ product, qtyController }: ProductActionsProps) => {
 
     const handeAddToBasketClick = () => {
         addToBasket(productToBasketItem(product, quantity));
+        toast.success("Added to cart");
         reset();
     };
 

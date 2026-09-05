@@ -14,37 +14,42 @@ const SearchFilter = ({ searchParams }: SearchParamProps) => {
     const isFirstRender = useRef(true);
     const router = useRouter();
     const pathname = usePathname();
-    const [search, setSearch] = useState(
-        typeof searchParams.search === "string" ? searchParams.search : "",
-    );
+
+    const urlSearch =
+        typeof searchParams.search === "string" ? searchParams.search : "";
+
+    const [search, setSearch] = useState(urlSearch);
+    const [prevUrlSearch, setPrevUrlSearch] = useState(urlSearch);
 
     const debouncedSearch = useDebounce({ value: search, delay: 700 });
+    const prevDebouncedRef = useRef(debouncedSearch);
+
+    if (urlSearch !== prevUrlSearch) {
+        setPrevUrlSearch(urlSearch);
+        setSearch(urlSearch);
+    }
 
     useEffect(() => {
+        prevDebouncedRef.current = urlSearch;
         if (isFirstRender.current) {
             isFirstRender.current = false;
+            prevDebouncedRef.current = debouncedSearch;
             return;
         }
-        const currentSearch =
-            typeof searchParams.search === "string" ? searchParams.search : "";
 
-        if (currentSearch === debouncedSearch) {
+        if (prevDebouncedRef.current === debouncedSearch) {
             return;
         }
+        prevDebouncedRef.current = debouncedSearch;
 
         router.replace(
             `${pathname}?${updateSearchParams({
                 searchParams,
-                updates: {
-                    search: debouncedSearch,
-                    page: "1",
-                },
+                updates: { search: debouncedSearch, page: "1" },
             })}`,
-            {
-                scroll: false,
-            },
+            { scroll: false },
         );
-    }, [debouncedSearch, router, pathname, searchParams]);
+    }, [debouncedSearch]);
 
     return (
         <div className="relative group">

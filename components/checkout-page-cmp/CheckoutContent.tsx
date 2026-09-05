@@ -39,8 +39,6 @@ const CheckoutContent = () => {
 
     const onSubmitData = (data: CheckoutFormData) => {
         const payload = buildCreateOrderPayload(data, basketItems);
-        // console.table(payload.items);
-        // console.log(payload);
 
         mutate(payload);
     };

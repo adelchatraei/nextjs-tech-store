@@ -1,4 +1,5 @@
 import { CreditCard, Zap } from "lucide-react";
+import ClearAllButton from "./ClearAllButton";
 
 const CartHeader = () => {
     return (
@@ -13,13 +14,14 @@ const CartHeader = () => {
                         Review your selected items and proceed to checkout
                     </p>
                 </div>
-                <div>
-                    <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#F5F7FB] px-3 py-1 text-sm font-medium text-primary inset-shadow-sm inset-shadow-primary-light">
+                <div className="flex flex-col gap-3">
+                    <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#F5F7FB] px-3 py-1 text-sm font-medium text-primary inset-shadow-sm inset-shadow-primary-light w-fit">
                         <Zap size={14} />
                         <span className="text-gray-500">
                             Fast Checkout Available
                         </span>
                     </div>
+                    <ClearAllButton />
                 </div>
             </div>
         </div>

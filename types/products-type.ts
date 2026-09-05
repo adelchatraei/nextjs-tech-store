@@ -15,7 +15,7 @@ export interface Product {
     regularPrice: number;
     images: string[];
     image: string;
-    category: string;
+    category: Category;
     subCategory: string;
     brand: string;
     modelName: string;
@@ -34,4 +34,14 @@ export interface ProductsResponse {
     totalPages: number;
     currentPage: number;
     totalProducts: number;
+}
+
+export interface Category {
+    _id: string;
+    name: string;
+    slug: string;
+    icon: string;
+    parent: string | null;
+    createdAt: string;
+    updatedAt: string;
 }

@@ -1,6 +1,7 @@
 import useBasket from "@/store/useBasket";
 import { BasketItem } from "@/types/basket-type";
 import { Minus, Plus, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 type CartActionProps = {
     itemBasket: BasketItem;

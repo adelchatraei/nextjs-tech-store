@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source "./**/*.{ts,tsx}";
+
 @font-face {
     font-family: "TrebuchetMS";
     src: url("/trebuc.ttf") format("truetype");
@@ -144,4 +146,77 @@ html.lenis {
 
 .lenis.lenis-scrolling iframe {
     pointer-events: none;
+}
+
+.loader {
+    --color-1: #fff;
+    --color-2: rgba(255, 255, 255, 0);
+    --size: 1px;
+    animation: shadowRolling 2s linear infinite;
+}
+
+@keyframes shadowRolling {
+    0% {
+        box-shadow:
+            0 0 var(--color-2),
+            0 0 var(--color-2),
+            0 0 var(--color-2),
+            0 0 var(--color-2);
+    }
+    12% {
+        box-shadow:
+            calc(100 * var(--size)) 0 white,
+            0 0 var(--color-2),
+            0 0 var(--color-2),
+            0 0 var(--color-2);
+    }
+    25% {
+        box-shadow:
+            calc(110 * var(--size)) 0 white,
+            calc(100 * var(--size)) 0 white,
+            0 0 var(--color-2),
+            0 0 var(--color-2);
+    }
+    36% {
+        box-shadow:
+            calc(120 * var(--size)) 0 white,
+            calc(110 * var(--size)) 0 white,
+            calc(100 * var(--size)) 0 white,
+            0 0 var(--color-2);
+    }
+    50% {
+        box-shadow:
+            calc(130 * var(--size)) 0 white,
+            calc(120 * var(--size)) 0 white,
+            calc(110 * var(--size)) 0 white,
+            calc(100 * var(--size)) 0 white;
+    }
+    62% {
+        box-shadow:
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(130 * var(--size)) 0 white,
+            calc(120 * var(--size)) 0 white,
+            calc(110 * var(--size)) 0 white;
+    }
+    75% {
+        box-shadow:
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(130 * var(--size)) 0 white,
+            calc(120 * var(--size)) 0 white;
+    }
+    87% {
+        box-shadow:
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(130 * var(--size)) 0 white;
+    }
+    100% {
+        box-shadow:
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(200 * var(--size)) 0 var(--color-2),
+            calc(200 * var(--size)) 0 var(--color-2);
+    }
 }

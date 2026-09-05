@@ -3,11 +3,11 @@
 import DeliveryIcon from "@/components/icons/Slider/DeliveryIcon";
 import WarrantyIcon from "@/components/icons/Slider/WarrantyIcon";
 import Image from "next/image";
-import BaberImage from "@/public/download-1-removebg-preview.webp";
 import GuaranteeIcon from "@/components/icons/Slider/Guarantee";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, Transition } from "framer-motion";
+import { CreateBannerType } from "@/schemas/banner/banner.schema";
 
 export interface SliderItemProps {
     id: string;
@@ -19,7 +19,7 @@ export interface SliderItemProps {
 }
 
 interface SlideProps {
-    slide: SliderItemProps[];
+    slide: CreateBannerType["slides"];
 }
 
 const smoothTransition: Transition = {
@@ -91,23 +91,29 @@ const descriptionVariants = {
 const SliderItems = ({ slide }: SlideProps) => {
     const [current, setCurrent] = useState(0);
 
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         setCurrent((prev) => (prev + 1) % slide?.length);
+    //     }, 5000);
+
+    //     return () => clearInterval(interval);
+    // }, []);
+
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrent((prev) => (prev + 1) % slide?.length);
-        }, 5000);
+            setCurrent((prev) => (prev + 1) % slide.length);
+        }, 10000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [slide.length]);
 
-    if (!slide || slide.length === 0) return null;
-
-    const { tag, id, description, image, title1, title2 } = slide[current];
-
+    if (slide.length === 0) return null;
+    const currentSlide = slide[current];
     return (
         <div className="container-custom px-4 sm:px-15 relative z-10 w-full">
             <AnimatePresence mode="wait">
                 <motion.div
-                    key={id}
+                    key={currentSlide.description}
                     variants={containerVariants}
                     initial="initial"
                     animate="animate"
@@ -122,7 +128,7 @@ const SliderItems = ({ slide }: SlideProps) => {
                                 className=" inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-emerald-100 shadow-sm mb-4"
                             >
                                 <span className="text-[10px] sm:text-[12px] font-bold uppercase tracking-widest text-emerald-700">
-                                    {tag}
+                                    {currentSlide.badge}
                                 </span>
                             </motion.div>
 
@@ -130,10 +136,10 @@ const SliderItems = ({ slide }: SlideProps) => {
                                 variants={textVariants}
                                 className=" text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-black tracking-tight text-slate-900 mb-4 leading-[1.1]"
                             >
-                                {title1}
+                                {currentSlide.headlinePrimary}
                                 <br className="hidden sm:block" />
                                 <span className="text-transparent bg-clip-text bg-linear-to-r from-green-600 to-emerald-500">
-                                    {title2}
+                                    {currentSlide.headlineSecondary}
                                 </span>
                             </motion.h1>
 
@@ -141,7 +147,7 @@ const SliderItems = ({ slide }: SlideProps) => {
                                 variants={descriptionVariants}
                                 className=" mx-auto lg:mx-0 max-w-xl text-sm sm:text-lg md:text-xl text-slate-700 mb-8 leading-relaxed font-medium"
                             >
-                                {description}
+                                {currentSlide.description}
                             </motion.p>
 
                             <motion.div
@@ -180,7 +186,7 @@ const SliderItems = ({ slide }: SlideProps) => {
                             </div>
 
                             <Image
-                                src={image}
+                                src={currentSlide.image}
                                 alt="banner-image"
                                 priority
                                 fill

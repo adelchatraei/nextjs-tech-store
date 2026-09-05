@@ -1,14 +1,15 @@
 import Slider from "@/components/Main-cpm/Slider";
 import StoreFrant from "@/components/Main-cpm/StoreFrant";
 import Brands from "@/components/Main-cpm/‌‌Brands";
+import normalizeProductFilters from "@/utils/normalizeProductFilters";
 
-const Home = async ({
-    searchParams,
-}: {
-    searchParams: Promise<{ [key: string]: string | undefined }>;
-}) => {
+type HomePageProps = {
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+const Home = async ({ searchParams }: HomePageProps) => {
     const params = await searchParams;
-    const sort = params.sort || "newest";
+    const filter = normalizeProductFilters(params);
 
     return (
         <main className="min-h-[70vh]">
@@ -20,7 +21,7 @@ const Home = async ({
                     <Brands />
                 </section>
                 <section className="container-custom py-12 lg:py-16 relative z-20 flex flex-col gap-12 lg:gap-16">
-                    <StoreFrant sort={sort} />
+                    <StoreFrant filter={filter} searchParam={params} />
                 </section>
             </div>
         </main>

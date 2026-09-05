@@ -2,7 +2,6 @@
 
 import { Truck } from "lucide-react";
 import InputField from "../ui/InputField";
-// import { useState } from "react";
 import RadioGroup from "../ui/RadioGroup";
 import { Controller, useFormContext } from "react-hook-form";
 import { CheckoutFormData } from "@/schemas/checkout/checkout.schema";
@@ -79,7 +78,7 @@ const ShippingDetails = () => {
                     label="House / Street / Building"
                     id="address"
                     placeholder="e.g : Hauptstraße 12"
-                    className="sm:col-span-2"
+                    containerClassName="sm:col-span-2"
                     error={errors.shippingInfo?.address?.message}
                 />
                 <InputField

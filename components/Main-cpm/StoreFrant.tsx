@@ -5,15 +5,21 @@ import QualityOffer from "./QualityOffer";
 import CustomerClub from "./CustomerClub";
 import Articles from "./Articles";
 import AboutStore from "./AboutStore";
+import { ProductFilterType } from "@/types/ProductFiltersType";
 
-const StoreFrant = ({ sort }: { sort: string }) => {
+export type StoreFrantProps = {
+    filter: ProductFilterType;
+    searchParam: Record<string, string | string[] | undefined>;
+};
+
+const StoreFrant = ({ filter, searchParam }: StoreFrantProps) => {
     return (
         <>
             <div className="">
                 <Categories />
             </div>
             <div className="">
-                <FeaturedProducts sort={sort} />
+                <FeaturedProducts filter={filter} searchParam={searchParam} />
             </div>
             <div className="">
                 <CompanyHighlights />

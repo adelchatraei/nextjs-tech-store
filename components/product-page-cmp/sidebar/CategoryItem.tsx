@@ -1,8 +1,12 @@
+"use client";
+
 import { CategoryTreeNode } from "@/types/category-type";
 import { ChevronRight } from "lucide-react";
 import CategoryTree from "./CategoryTree";
 import Link from "next/link";
 import updateSearchParams from "@/utils/updateSearchParams";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type CategoryItemProps = {
     root: CategoryTreeNode;
@@ -10,6 +14,11 @@ type CategoryItemProps = {
 };
 
 const CategoryItem = ({ root, searchParams }: CategoryItemProps) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const haveChild = root.children.length > 0;
+
+    // if (!haveChild) return null;
+
     const activeCategory =
         typeof searchParams.category === "string"
             ? searchParams.category
@@ -17,7 +26,11 @@ const CategoryItem = ({ root, searchParams }: CategoryItemProps) => {
     const isActiv = activeCategory === root.slug;
 
     return (
-        <div className="relative group">
+        <div
+            className="relative group"
+            onMouseEnter={() => setIsOpen(true)}
+            onMouseLeave={() => setIsOpen(false)}
+        >
             <Link
                 href={`/products?${updateSearchParams({
                     searchParams,
@@ -37,7 +50,7 @@ const CategoryItem = ({ root, searchParams }: CategoryItemProps) => {
                 </div>
 
                 <div className="flex items-center">
-                    {root.children.length > 0 && (
+                    {haveChild && (
                         <ChevronRight
                             size={14}
                             className="text-slate-300 transition-transform rotate-90 md:rotate-0 md:translate-x-1"
@@ -45,17 +58,25 @@ const CategoryItem = ({ root, searchParams }: CategoryItemProps) => {
                     )}
                 </div>
             </Link>
-            {root.children.length > 0 && (
-                <div className="absolute md:left-full top-0 z-50">
-                    <div className=" w-full md:w-64 bg-white rounded-2xl border border-gray-100 shadow-xl p-2 ml-0 md:ml-2 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-all duration-400 ">
-                        {/* Popap */}
-                        <CategoryTree
-                            data={root.children}
-                            searchParams={searchParams}
-                        />
-                    </div>
-                </div>
-            )}
+            {/* Popap */}
+            <AnimatePresence>
+                {isOpen && haveChild ? (
+                    <motion.div
+                        initial={{ opacity: 0, x: -10 }} // شروع از کمی سمت چپ‌تر
+                        animate={{ opacity: 1, x: 0 }} // حرکت به مکان اصلی
+                        exit={{ opacity: 0, x: -10 }} // موقع بسته شدن برگرده عقب
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="md:absolute top-0 md:left-full z-100 md:pl-2 w-full md:w-64"
+                    >
+                        <div className="bg-white rounded-2xl border border-gray-100 shadow-2xl p-2 ml-4 md:ml-0">
+                            <CategoryTree
+                                data={root.children}
+                                searchParams={searchParams}
+                            />
+                        </div>
+                    </motion.div>
+                ) : null}
+            </AnimatePresence>
         </div>
     );
 };

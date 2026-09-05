@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ReviewSchema } from "./review";
+import { CategoryMutationResponseSchema } from "../categorys/categoryMutationResponse";
 
 export const ProductSchema = z.object({
     name: z.string(),
@@ -8,7 +9,7 @@ export const ProductSchema = z.object({
     regularPrice: z.number(),
     images: z.array(z.string()),
     image: z.string(),
-    category: z.string(),
+    category: CategoryMutationResponseSchema,
     subCategory: z.string(),
     brand: z.string(),
     modelName: z.string(),
