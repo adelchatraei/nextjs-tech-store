@@ -15,7 +15,7 @@ const EconomicValue = ({ order }: EconomicValueProps) => {
                             key={index}
                             className="text-base font-black text-gray-800"
                         >
-                            {item.price}
+                            {item.price.toLocaleString()}
                         </p>
                     );
                 })}

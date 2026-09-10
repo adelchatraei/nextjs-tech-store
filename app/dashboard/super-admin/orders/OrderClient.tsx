@@ -8,6 +8,8 @@ import OrderPipeline from "../components/orders/OrderPipeline";
 import OrderToolbar from "../components/orders/OrderToolbar";
 import OrderView from "../components/orders/OrderView";
 import { useState } from "react";
+import EmptyOrder from "../components/orders/EmptyOrder";
+import useDebounce from "@/hooks/useDebounce";
 
 type OrderClientProps = {
     orders: OrdersResponseType;
@@ -15,17 +17,24 @@ type OrderClientProps = {
 
 const OrderClient = ({ orders }: OrderClientProps) => {
     const [search, setSearch] = useState("");
+    const [status, setStatus] = useState("All");
+
+    const debouncedSearch = useDebounce({
+        value: search,
+        delay: 700,
+    });
 
     const filteredOrders = orders.filter((order) => {
-        const query = search.trim().toLowerCase();
-
-        if (!query) return true;
-
-        return (
+        const query = debouncedSearch.trim().toLowerCase();
+        const matchesSearch =
+            !query ||
             order._id.toLowerCase().includes(query) ||
             order.shippingInfo.name.toLowerCase().includes(query) ||
-            order.shippingInfo.phone.toLowerCase().includes(query)
-        );
+            order.shippingInfo.phone.toLowerCase().includes(query);
+
+        const matchesStatus = status === "All" || order.status === status;
+
+        return matchesSearch && matchesStatus;
     });
 
     return (
@@ -36,6 +45,8 @@ const OrderClient = ({ orders }: OrderClientProps) => {
                 orders={orders}
                 search={search}
                 setSearch={setSearch}
+                status={status}
+                setStatus={setStatus}
                 filteredOrders={filteredOrders}
             />
 
@@ -67,36 +78,40 @@ const OrderClient = ({ orders }: OrderClientProps) => {
                         </tr>
                     </thead>
 
-                    <tbody className="divide-y divide-gray-50">
-                        {filteredOrders.map((order) => (
-                            <tr
+                    {filteredOrders.length === 0 ? (
+                        <EmptyOrder setStatus={setStatus} />
+                    ) : (
+                        filteredOrders.map((order) => (
+                            <tbody
                                 key={order._id}
-                                className="group hover:bg-gray-50/40 transition-colors"
+                                className="divide-y divide-gray-50"
                             >
-                                {/* Order Info */}
+                                <tr className="group hover:bg-gray-50/40 transition-colors">
+                                    {/* Order Info */}
 
-                                <OrderInfo order={order} />
+                                    <OrderInfo order={order} />
 
-                                {/* Customer */}
+                                    {/* Customer */}
 
-                                <OrderCustomer
-                                    shippingInfo={order.shippingInfo}
-                                />
+                                    <OrderCustomer
+                                        shippingInfo={order.shippingInfo}
+                                    />
 
-                                {/* Economic Value */}
+                                    {/* Economic Value */}
 
-                                <EconomicValue order={order} />
+                                    <EconomicValue order={order} />
 
-                                {/* Pipeline */}
+                                    {/* Pipeline */}
 
-                                <OrderPipeline status={order.status} />
+                                    <OrderPipeline status={order.status} />
 
-                                {/* Actions */}
+                                    {/* Actions */}
 
-                                <OrderView />
-                            </tr>
-                        ))}
-                    </tbody>
+                                    <OrderView />
+                                </tr>
+                            </tbody>
+                        ))
+                    )}
                 </table>
             </div>
         </>

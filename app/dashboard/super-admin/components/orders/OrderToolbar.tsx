@@ -1,18 +1,22 @@
 import { OrdersResponseType } from "@/schemas/order/order.schema";
-import { ChevronDown, Clock, Filter, Search, ShoppingCart } from "lucide-react";
+import { Clock, Search, ShoppingCart } from "lucide-react";
+import OrderStatusFilter from "./OrderStatusFilter";
 
 type OrderToolbarProps = {
     orders: OrdersResponseType;
     search: string;
     setSearch: (value: string) => void;
+    status: string;
+    setStatus: (value: string) => void;
     filteredOrders: OrdersResponseType;
 };
 
 const OrderToolbar = ({
-    orders,
     search,
     setSearch,
     filteredOrders,
+    status,
+    setStatus,
 }: OrderToolbarProps) => {
     return (
         <div className="p-5 sm:p-6 border-b border-gray-100">
@@ -36,17 +40,7 @@ const OrderToolbar = ({
 
                 {/* Status Filter */}
 
-                <button
-                    type="button"
-                    className="w-full xl:w-auto flex items-center justify-between gap-5 px-4 py-3 rounded-2xl bg-white border border-gray-100 text-xs font-bold text-gray-600 hover:border-primary/20 hover:bg-primary/5 transition-all"
-                >
-                    <span className="flex items-center gap-2">
-                        <Filter size={15} className="text-gray-400" />
-                        All Statuses
-                    </span>
-
-                    <ChevronDown size={14} className="text-gray-400" />
-                </button>
+                <OrderStatusFilter status={status} setStatus={setStatus} />
 
                 {/* Active Filters */}
 
